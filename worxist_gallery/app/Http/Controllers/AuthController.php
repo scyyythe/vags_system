@@ -36,10 +36,9 @@ class AuthController extends Controller
             'password' => ['required']
         ]);
 
-        // Check if user exists based on username
         $user = User::where('username', $request->username)->first();
 
-        // Attempt login with the "remember" option
+
         if (Auth::attempt(['username' => $request->username, 'password' => $request->password], $request->remember)) {
             if (!$user || !Hash::check($request->password, $user->password)) {
                 return response([

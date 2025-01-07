@@ -29,26 +29,47 @@ class PostController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
-
+        // Validate incoming data
         $fields = $request->validate([
             'title' => ['required', 'max:255'],
-            'body'  => ['required', 'max:255'],
+            'description' => ['required', 'max:255'],
+            'category' => ['required'],
+            'image' => ['required', 'max:1000']
+            // 'image' => ['required', 'file', 'max:1000', 'mimes:jpeg,png,jpg']
         ]);
 
+        // Handle file upload and store it
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('posts_images', 'public');
+            $fields['image'] = $imagePath;
+        }
+
+        // Create the post with the user association
         $post = $request->user()->posts()->create($fields);
+
 
         return $post;
     }
 
 
+
     public function update(Request $request, Post $post)
     {
         Gate::authorize('modify', $post);
+        // Validate incoming data
         $fields = $request->validate([
             'title' => ['required', 'max:255'],
-            'body'  => ['required', 'max:255'],
+            'description' => ['required', 'max:255'],
+            'category' => ['required'],
+            'image' => ['required', 'max:1000']
+            // 'image' => ['required', 'file', 'max:1000', 'mimes:jpeg,png,jpg']
         ]);
 
+        // Handle file upload and store it
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('posts_images', 'public');
+            $fields['image'] = $imagePath;
+        }
         $post->update($fields);
 
         return $post;

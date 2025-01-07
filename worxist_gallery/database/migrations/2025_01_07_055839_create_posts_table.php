@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id('post_id');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->text('body');
+            $table->text('description');
+            $table->string('category');
+            $table->string('image');
+            $table->string('post_status')->default('Pending');
             $table->timestamps();
         });
     }

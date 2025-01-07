@@ -59,14 +59,14 @@ export function Login({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ username, password, remember: rememberMe }), // Send username and password as JSON
+          body: JSON.stringify({ username, password, remember: rememberMe }),
         });
 
         const data = await response.json();
 
         if (response.ok) {
           localStorage.setItem("token", data.token);
-          setModalVisible(true); // Show success modal
+          setModalVisible(true);
           form.reset();
         } else {
           setErrors({
