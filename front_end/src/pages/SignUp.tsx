@@ -159,7 +159,7 @@ export function SignUp({
       console.log("Response data:", data);
 
       if (response.ok) {
-        // On success, reset the form and show the modal
+        localStorage.setItem("token", data.token);
         form.reset();
         setModalVisible(true);
         setTimeout(() => {

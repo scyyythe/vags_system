@@ -36,14 +36,25 @@ class AuthController extends Controller
             'password' => ['required']
         ]);
 
+        // Check if user exists based on username
         $user = User::where('username', $request->username)->first();
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response([
-                'message' => 'The provided credentials are incorrect.'
-            ], 401);
+
+        // Attempt login with the "remember" option
+        if (Auth::attempt(['username' => $request->username, 'password' => $request->password], $request->remember)) {
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return response([
+                    'message' => 'The provided credentials are incorrect.'
+                ], 401);
+            }
+
+            $token = $user->createToken($user->name);
+            return ['user' => $user, 'token' => $token->plainTextToken];
         }
-        $token = $user->createToken($user->name);
-        return ['user' => $user, 'token' => $token->plainTextToken];
+
+        // In case authentication fails
+        return response([
+            'message' => 'The provided credentials are incorrect.'
+        ], 401);
     }
 
     public function logout(Request $request)
