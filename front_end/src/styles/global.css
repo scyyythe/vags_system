@@ -1,0 +1,41 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  @apply antialiased;
+}
+
+* {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-black;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-customRed rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-customRed;
+}
+
+/* Hide statue on smaller screens */
+@media (max-width: 420px) {
+  .hidden-mobile {
+    display: none;
+  }
+}
