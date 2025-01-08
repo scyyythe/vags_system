@@ -4,12 +4,15 @@ import { AuthLayout } from "../components/layouts/AuthLayout";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
 import { Modal } from "../components/ui/Modal";
+import { useNavigate } from "react-router-dom";
 
 export function Login({
   onSectionChange,
 }: {
   onSectionChange: (section: string) => void;
 }) {
+  const navigate = useNavigate();
+
   const [errors, setErrors] = useState({
     username: "",
     password: "",
@@ -68,15 +71,18 @@ export function Login({
           localStorage.setItem("token", data.token);
           setModalVisible(true);
           form.reset();
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 3000);
         } else {
           setErrors({
-            username: data.username || "",
-            password: data.password || "",
+            username: data.username || "'",
+            password: data.password || "Invalid Credentials",
           });
         }
       } catch (error) {
         console.error("Login error:", error);
-
+        setModalVisible(true);
         setErrors({
           username: "An error occurred. Please try again later.",
           password: "",

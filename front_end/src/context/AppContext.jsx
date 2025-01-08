@@ -1,30 +1,28 @@
-import { createContext, useEffect, useState } from "react";
+import React, { createContext, useState, useContext } from 'react';
 
-export const AppContext = createContext();
+const AuthContext = createContext();
 
-export default function AppContextProvider({ children }) {
-    const [token, setToken] = useState(localStorage.getItem("token") || "");  // Corrected the typo
-    const [user, setUser] = useState(null);  // Corrected initialization
+export const useAuth = () => useContext(AuthContext);
 
-    async function getUser() {
-        const response = await fetch('api/user', {
-            headers: {
-                Authorization: `Bearer ${token}`  // Corrected the syntax for string interpolation
-            }
-        });
-        const data = await response.json();
-        setUser(data);
-    }
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
-    useEffect(() => {
-        if (token) {
-            getUser();
-        }
-    }, [token]);
+  const login = (userData, authToken) => {
+    setUser(userData);
+    setToken(authToken);
+    localStorage.setItem('token', authToken);
+  };
 
-    return (
-        <AppContext.Provider value={{ token, setToken, user }}>
-            {children}
-        </AppContext.Provider>
-    );
-}
+  const logout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem('token');
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, token, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};

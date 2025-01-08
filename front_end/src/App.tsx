@@ -3,6 +3,7 @@ import { Login } from "./pages/Login";
 import { SignUp } from "./pages/SignUp";
 import "./styles/global.css";
 import { Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
 
 export default function App() {
   const handleSectionChange = (section: string) => {
@@ -21,6 +22,7 @@ export default function App() {
           path="/signup"
           element={<SignUp onSectionChange={handleSectionChange} />}
         />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </main>
   );
