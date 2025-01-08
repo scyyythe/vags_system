@@ -73,7 +73,7 @@ export function Login({
           form.reset();
           setTimeout(() => {
             navigate("/dashboard");
-          }, 3000);
+          }, 2000);
         } else {
           setErrors({
             username: data.username || "'",
