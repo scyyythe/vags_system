@@ -70,14 +70,15 @@ export function Login({
 
         const data = await response.json();
         console.log(data);
+
         if (response.ok) {
           localStorage.setItem("token", data.token);
           setToken(data.token);
           setModalVisible(true);
           form.reset();
-          // setTimeout(() => {
-          //   navigate("/dashboard");
-          // }, 2000);
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 2000);
         } else {
           setErrors({
             username: data.username || "'",

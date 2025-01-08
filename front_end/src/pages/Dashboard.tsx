@@ -1,11 +1,16 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AppContext } from "../context/AppContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const { user, token, setUser, setToken } = useContext(AppContext);
   const navigate = useNavigate();
-
+  useEffect(() => {
+    // Navigate to login if user is null
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
   async function handleLogout(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -37,9 +42,9 @@ export default function Dashboard() {
 
   return (
     <div>
-      {user ? (
+      {user && (
         <div>
-          <p className="text-white">hello {user.name}</p>
+          <p className="text-white">Hello {user.name}</p>
 
           <form action="" onSubmit={handleLogout}>
             <button
@@ -50,13 +55,6 @@ export default function Dashboard() {
             </button>
           </form>
         </div>
-      ) : (
-        <Link
-          to="/signup"
-          className="text-customRed font-medium hover:text-customRed"
-        >
-          Sign Up ↑
-        </Link>
       )}
     </div>
   );

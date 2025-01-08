@@ -162,6 +162,7 @@ export function SignUp({
       // Log response data to check if the response is being received
       console.log("Response data:", data);
 
+      // set the token after the register
       if (response.ok) {
         localStorage.setItem("token", data.token);
         setToken(data.token);
