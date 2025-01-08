@@ -26,9 +26,15 @@ Route::put('posts/{posts}', [PostController::class, 'update']);
 Route::delete('posts/{posts}', [PostController::class, 'destroy']);
 Route::get('posts/{posts}', [PostController::class, 'show']);
 
+// Update Posts Status by Admin
+Route::patch('posts/{post}/status', [PostController::class, 'updateStatus']);
 
 // Request an Exhibit
 Route::post('exhibits/', [ExhibitController::class, 'store']);
 Route::put('exhibits/{exhibits}', [ExhibitController::class, 'update']);
 Route::delete('exhibits/{exhibits}', [ExhibitController::class, 'destroy']);
 Route::get('exhibits/{exhibits}', [ExhibitController::class, 'show']);
+
+
+// Update Exhibit Status by Organizer
+Route::patch('exhibits/{exhibit}/status', [ExhibitController::class, 'updateStatus']);

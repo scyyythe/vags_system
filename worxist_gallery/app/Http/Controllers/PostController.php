@@ -75,6 +75,24 @@ class PostController extends Controller implements HasMiddleware
 
         return $post;
     }
+
+    // accepet Post by admin
+    public function updateStatus(Request $request, Post $post)
+    {
+        // Authorize the admin to update the status
+        Gate::authorize('updateStatus', $post);
+
+        // Validate only the exhibit_status field
+        $fields = $request->validate([
+            'post_status' => ['required', 'in:Accepted,Rejected,Pending'], // Specify valid statuses
+        ]);
+
+        // Update the exhibit's status
+        $post->update($fields);
+
+        return response()->json(['message' => 'Post status updated successfully.', 'post' => $post], 200);
+    }
+
     /**
      * Display the specified resource.
      */

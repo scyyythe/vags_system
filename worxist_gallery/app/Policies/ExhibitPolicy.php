@@ -8,59 +8,23 @@ use Illuminate\Auth\Access\Response;
 
 class ExhibitPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
+    // Allow exhibit modification by the owner or an admin
+    public function modify(User $user, Exhibit $exhibit): Response
     {
-        return false;
+        if ($user->isOrganizer()) {
+            return Response::allow();
+        }
+
+        return $user->id === $exhibit->user_id
+            ? Response::allow()
+            : Response::deny('You do not own this exhibit.');
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Exhibit $exhibit): bool
+    // Separate policy for updating the status (oragnizer-only)
+    public function updateStatus(User $user): Response
     {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Exhibit $exhibit): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Exhibit $exhibit): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Exhibit $exhibit): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Exhibit $exhibit): bool
-    {
-        return false;
+        return $user->isOrganizer()
+            ? Response::allow()
+            : Response::deny('Only organizers can update the status of this exhibit.');
     }
 }
