@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthLayout } from "../components/layouts/AuthLayout";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
 import { Modal } from "../components/ui/Modal";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
 export function Login({
   onSectionChange,
@@ -12,6 +13,8 @@ export function Login({
   onSectionChange: (section: string) => void;
 }) {
   const navigate = useNavigate();
+  // token
+  const { setToken } = useContext(AppContext);
 
   const [errors, setErrors] = useState({
     username: "",
@@ -66,14 +69,15 @@ export function Login({
         });
 
         const data = await response.json();
-
+        console.log(data);
         if (response.ok) {
           localStorage.setItem("token", data.token);
+          setToken(data.token);
           setModalVisible(true);
           form.reset();
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 2000);
+          // setTimeout(() => {
+          //   navigate("/dashboard");
+          // }, 2000);
         } else {
           setErrors({
             username: data.username || "'",
@@ -96,6 +100,7 @@ export function Login({
       <div className="max-w-lg mx-auto w-full">
         <div className="absolute top-10 right-4 md:right-20 p-7 text-right">
           <span className="text-gray-700">Not a member? </span>
+
           <Link
             to="/signup"
             className="text-customRed font-medium hover:text-customRed"

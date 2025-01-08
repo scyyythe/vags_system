@@ -1,28 +1,38 @@
-import React, { createContext, useState, useContext } from 'react';
+import { createContext, useEffect } from "react";
+import React, { useState } from 'react';
 
-const AuthContext = createContext();
+export const AppContext=createContext()
 
-export const useAuth = () => useContext(AuthContext);
+export default function AppProvider({children}){
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const[token,setToken]=useState(localStorage.getItem('token'));
+  const [user, setUser]=useState(null)
 
-  const login = (userData, authToken) => {
-    setUser(userData);
-    setToken(authToken);
-    localStorage.setItem('token', authToken);
-  };
+  async function getUser(){
+    const res=await fetch('/api/user',{
+      headers:{
+        Authorization:`Bearer ${token}`,
+      },
+    });
+  const data=await res.json();
 
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem('token');
-  };
+  if(res.ok){
+    setUser(data);
+  }
+  
+console.log(data);
+  
+  }
+  useEffect(()=>{
+    if(token){
+      getUser();
+    }
+  },[token])
+
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AppContext.Provider value={{token, setToken, user,setUser}}>
       {children}
-    </AuthContext.Provider>
-  );
-};
+    </AppContext.Provider>
+  )
+}

@@ -2,15 +2,19 @@ import { Link } from "react-router-dom";
 import { AuthLayout } from "../components/layouts/AuthLayout";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Modal } from "../components/ui/Modal";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
 export function SignUp({
   onSectionChange,
 }: {
   onSectionChange: (section: string) => void;
 }) {
+  // token
+  const { setToken } = useContext(AppContext);
+
   const [errors, setErrors] = useState({
     name: "",
     username: "",
@@ -160,6 +164,7 @@ export function SignUp({
 
       if (response.ok) {
         localStorage.setItem("token", data.token);
+        setToken(data.token);
         form.reset();
         setModalVisible(true);
         setTimeout(() => {
