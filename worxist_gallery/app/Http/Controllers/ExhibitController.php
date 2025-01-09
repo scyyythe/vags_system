@@ -77,6 +77,7 @@ class ExhibitController extends Controller implements HasMiddleware
         return $exhibit;
     }
 
+    // This is for the ogranizer they can Accept and Reject the Exhibit
     public function updateStatus(Request $request, Exhibit $exhibit)
     {
         // Authorize the admin to update the status

@@ -6,6 +6,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExhibitController;
+use App\Http\Controllers\FollowController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\SavedController;
+use App\Http\Controllers\FavoriteController;
+
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -18,23 +24,50 @@ Route::apiResource('exhibits', ExhibitController::class);
 // Authentication
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-
-// Upload a post
-Route::post('posts/', [PostController::class, 'store']);
-Route::put('posts/{posts}', [PostController::class, 'update']);
-Route::delete('posts/{posts}', [PostController::class, 'destroy']);
-Route::get('posts/{posts}', [PostController::class, 'show']);
-
-// Update Posts Status by Admin
-Route::patch('posts/{post}/status', [PostController::class, 'updateStatus']);
-
-// Request an Exhibit
-Route::post('exhibits/', [ExhibitController::class, 'store']);
-Route::put('exhibits/{exhibits}', [ExhibitController::class, 'update']);
-Route::delete('exhibits/{exhibits}', [ExhibitController::class, 'destroy']);
-Route::get('exhibits/{exhibits}', [ExhibitController::class, 'show']);
 
 
-// Update Exhibit Status by Organizer
-Route::patch('exhibits/{exhibit}/status', [ExhibitController::class, 'updateStatus']);
+// with auth sanctum
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+
+    // Upload a post
+    Route::post('posts/', [PostController::class, 'store']);
+    Route::put('posts/{posts}', [PostController::class, 'update']);
+    Route::delete('posts/{posts}', [PostController::class, 'destroy']);
+    Route::get('posts/{posts}', [PostController::class, 'show']);
+    // Update Posts Status by Admin
+    Route::patch('posts/{post}/status', [PostController::class, 'updateStatus']);
+
+
+    // Get POst by a specific user
+    Route::get('/user/posts', [PostController::class, 'getUserPosts']);
+    Route::get('/user/{user}/posts', [PostController::class, 'getPostByUser']);
+    // Request an Exhibit
+    Route::post('exhibits/', [ExhibitController::class, 'store']);
+    Route::put('exhibits/{exhibits}', [ExhibitController::class, 'update']);
+    Route::delete('exhibits/{exhibits}', [ExhibitController::class, 'destroy']);
+    Route::get('exhibits/{exhibits}', [ExhibitController::class, 'show']);
+
+
+    // Update Exhibit Status by Organizer
+    Route::patch('exhibits/{exhibit}/status', [ExhibitController::class, 'updateStatus']);
+
+    // User follow and unfollow
+    Route::post('/follow', [FollowController::class, 'follow']);
+    Route::delete('/unfollow', [FollowController::class, 'unfollow']);
+
+
+    // Like routes
+    Route::post('/posts/{post}/like', [LikeController::class, 'likePost']);
+    Route::delete('/posts/{post}/like', [LikeController::class, 'removeLike']);
+
+    // Save routes
+    Route::post('/posts/{post}/save', [SavedController::class, 'savePost']);
+    Route::delete('/posts/{post}/save', [SavedController::class, 'removeSave']);
+
+    // Favorite routes
+    Route::post('/posts/{post}/favorite', [FavoriteController::class, 'favoritePost']);
+    Route::delete('/posts/{post}/favorite', [FavoriteController::class, 'removeFavorite']);
+});

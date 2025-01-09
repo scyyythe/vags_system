@@ -72,4 +72,21 @@ class User extends Authenticatable
     {
         return $this->role === 'Organizer';
     }
+
+    // Interactions
+    // liikes
+    public function likes()
+    {
+        return $this->hasMany(Like::class, 'user_id');
+    }
+    //favorites
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class, 'user_id');
+    }
+    //saved_posts
+    public function saved_post()
+    {
+        return $this->hasMany(Saved::class, 'user_id');
+    }
 }

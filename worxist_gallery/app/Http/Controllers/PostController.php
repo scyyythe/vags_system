@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 
 class PostController extends Controller implements HasMiddleware
 {
@@ -108,5 +109,19 @@ class PostController extends Controller implements HasMiddleware
         $post->delete();
 
         return response()->json(['message' => 'Post deleted']);
+    }
+
+    public function getUserPosts(Request $request)
+    {
+
+        $user = $request->user();
+        $posts = $user->posts;
+        return response()->json($posts);
+    }
+    //get post by user id
+    public function getPostByUser(User $user)
+    {
+        $posts = $user->posts;
+        return $posts;
     }
 }
