@@ -9,6 +9,8 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
+use App\Models\Notification;
+
 
 class PostController extends Controller implements HasMiddleware
 {
@@ -85,12 +87,24 @@ class PostController extends Controller implements HasMiddleware
 
         // Validate only the exhibit_status field
         $fields = $request->validate([
-            'post_status' => ['required', 'in:Accepted,Rejected,Pending'], // Specify valid statuses
+            'post_status' => ['required', 'in:Accepted,Rejected,Pending'],
         ]);
 
         // Update the exhibit's status
         $post->update($fields);
+        $message = '';
+        if ($fields['post_status'] == 'Accepted') {
+            $message = 'Your post has been accepted by the administrator.';
+        } elseif ($fields['post_status'] == 'Rejected') {
+            $message = 'Your post has been rejected by the administrator.';
+        }
 
+        Notification::create([
+            'user_id' => $post->user_id,
+            'message' => $message,
+            'type' => 'status_update',
+            'is_read' => false,
+        ]);
         return response()->json(['message' => 'Post status updated successfully.', 'post' => $post], 200);
     }
 

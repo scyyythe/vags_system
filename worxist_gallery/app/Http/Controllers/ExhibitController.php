@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Gate;
+use App\Models\Notification;
 
 
 class ExhibitController extends Controller implements HasMiddleware
@@ -28,7 +29,7 @@ class ExhibitController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
-        // Check if the user is authenticated
+
         if (!$request->user()) {
             return response()->json(['error' => 'User not authenticated'], 401);
         }
@@ -107,7 +108,19 @@ class ExhibitController extends Controller implements HasMiddleware
 
         // Update the exhibit's status
         $exhibit->update($fields);
+        $message = '';
+        if ($fields['exhibit_status'] == 'Accepted') {
+            $message = 'Your exhibit has been accepted by the organizer.';
+        } elseif ($fields['exhibit_status'] == 'Rejected') {
+            $message = 'Your exhibit has been rejected by the organizer.';
+        }
 
+        Notification::create([
+            'user_id' => $exhibit->user_id,
+            'message' => $message,
+            'type' => 'status_update',
+            'is_read' => false,
+        ]);
         return response()->json(['message' => 'Exhibit status updated successfully.', 'exhibit' => $exhibit], 200);
     }
 

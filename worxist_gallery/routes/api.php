@@ -11,7 +11,7 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\SavedController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ArtworksExhibitController;
-
+use App\Http\Controllers\NotificationController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -77,4 +77,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // Favorite routes
     Route::post('/posts/{post}/favorite', [FavoriteController::class, 'favoritePost']);
     Route::delete('/posts/{post}/favorite', [FavoriteController::class, 'removeFavorite']);
+
+    // NOtifcaiton
+
+    Route::get('/notifications', [NotificationController::class, 'getUserNotifications']);
+    Route::put('/notifications/{notificationId}/read', [NotificationController::class, 'markNotificationAsRead']);
 });
