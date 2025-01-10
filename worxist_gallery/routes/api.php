@@ -85,6 +85,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/posts/{post}/favorite', [FavoriteController::class, 'favoritePost']);
     Route::delete('/posts/{post}/favorite', [FavoriteController::class, 'removeFavorite']);
 
+
+    Route::get('/user/posts/liked', [PostController::class, 'getUserLikedPosts']);
+    Route::get('/user/posts/saved', [PostController::class, 'getUserSavedPosts']);
+    Route::get('/user/posts/favorited', [PostController::class, 'getUserFavoritedPosts']);
+
     // NOtifcaiton
 
     Route::get('/notifications', [NotificationController::class, 'getUserNotifications']);

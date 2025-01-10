@@ -10,7 +10,7 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
 use App\Models\Notification;
-
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller implements HasMiddleware
 {
@@ -137,5 +137,49 @@ class PostController extends Controller implements HasMiddleware
     {
         $posts = $user->posts;
         return $posts;
+    }
+
+    public function getUserLikedPosts()
+    {
+        // Assuming a relationship is set up between User and Post via likes
+        $likedPosts = Auth::user()->likedPosts;
+
+        return response()->json($likedPosts);
+    }
+
+    public function getUserSavedPosts()
+    {
+        // Assuming a relationship is set up between User and Post via saved
+        $savedPosts = Auth::user()->savedPosts;
+
+        return response()->json($savedPosts);
+    }
+
+    public function getUserFavoritedPosts()
+    {
+        // Assuming a relationship is set up between User and Post via favorites
+        $favoritedPosts = Auth::user()->favoritedPosts;
+
+        return response()->json($favoritedPosts);
+    }
+    public function getUserFavoritesAndLikes(Request $request)
+    {
+        $user = $request->user();
+
+        $likedPosts = $user->likedPosts;
+        $favoritedPosts = $user->favoritedPosts;
+        $savedPosts = $user->savedPosts;
+
+        $posts = $likedPosts->merge($favoritedPosts)->merge($savedPosts)->unique('post_id');
+
+
+        return $posts->map(function ($post) {
+            return [
+                'post_id' => $post->post_id,
+                'title' => $post->title,
+                'description' => $post->description,
+                'created_at' => $post->created_at,
+            ];
+        });
     }
 }
