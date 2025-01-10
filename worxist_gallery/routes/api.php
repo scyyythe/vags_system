@@ -59,7 +59,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/exhibits/artworks', [ArtworksExhibitController::class, 'attachArtworkToExhibit']);
     Route::get('/exhibits/{exhibitId}/artworks', [ArtworksExhibitController::class, 'getArtworksByExhibit']);
     Route::delete('/exhibits/{exhibitId}/artworks/{postId}', [ArtworksExhibitController::class, 'detachArtworkFromExhibit']);
+    //for collaborator
+    Route::post('/exhibits/{exhibitId}/attach-artworks', [ExhibitController::class, 'attachArtworks']);
 
+
+    //get pending and accepted 
+    Route::get('/pending-exhibits', [ExhibitController::class, 'getPendingExhibits']);
+    Route::get('/accepted-exhibits', [ExhibitController::class, 'getAcceptedExhibits']);
+    Route::get('/ongoing-exhibits', [ExhibitController::class, 'getOngoing']);
 
     // User follow and unfollow
     Route::post('/follow', [FollowController::class, 'follow']);

@@ -11,7 +11,7 @@ class Exhibit extends Model
     use HasFactory;
 
     protected $primaryKey = 'exhibit_id';
-
+    protected $table = 'exhibits';
 
     protected $fillable = [
         'exhibit_title',
@@ -29,5 +29,14 @@ class Exhibit extends Model
     public function posts()
     {
         return $this->belongsToMany(Post::class, 'artworks_exhibits', 'exhibit_id', 'post_id');
+    }
+
+    public function collaborators()
+    {
+        return $this->hasMany(Collaborator::class, 'exhibit_id');
+    }
+    public function artworks()
+    {
+        return $this->hasMany(ArtworksExhibit::class, 'exhibit_id', 'exhibit_id');
     }
 }

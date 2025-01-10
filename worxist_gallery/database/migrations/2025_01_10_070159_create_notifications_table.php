@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();  // Primary key
-            $table->foreignId('user_id')     // The user who will receive the notification
-                ->constrained('users')    // Assuming you have a 'users' table
-                ->onDelete('cascade');    // Cascade delete if the user is deleted
-            $table->string('type');          // Type of notification (e.g., 'artwork_accepted', 'user_followed')
-            $table->text('message');         // The notification message
-            $table->boolean('is_read')->default(false);  // Whether the notification has been read
-            $table->timestamps();            // Created at and updated at timestamps
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->onDelete('cascade');
+            $table->string('type');
+            $table->text('message');
+            $table->boolean('is_read')->default(false);
+            $table->timestamps();
         });
     }
 

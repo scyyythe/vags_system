@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\ArtworksExhibit;
+use App\Models\Collaborator;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class ArtworksExhibitPolicy
+class CollaboratorPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class ArtworksExhibitPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, ArtworksExhibit $artworksExhibit): bool
+    public function view(User $user, Collaborator $collaborator): bool
     {
         return false;
     }
@@ -35,7 +35,7 @@ class ArtworksExhibitPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, ArtworksExhibit $artworksExhibit): bool
+    public function update(User $user, Collaborator $collaborator): bool
     {
         return false;
     }
@@ -43,7 +43,7 @@ class ArtworksExhibitPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, ArtworksExhibit $artworksExhibit): bool
+    public function delete(User $user, Collaborator $collaborator): bool
     {
         return false;
     }
@@ -51,7 +51,7 @@ class ArtworksExhibitPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, ArtworksExhibit $artworksExhibit): bool
+    public function restore(User $user, Collaborator $collaborator): bool
     {
         return false;
     }
@@ -59,7 +59,7 @@ class ArtworksExhibitPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, ArtworksExhibit $artworksExhibit): bool
+    public function forceDelete(User $user, Collaborator $collaborator): bool
     {
         return false;
     }
