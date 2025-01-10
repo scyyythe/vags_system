@@ -11,7 +11,7 @@ class Exhibit extends Model
     use HasFactory;
 
     protected $primaryKey = 'exhibit_id';
-    public $timestamps = false;
+
 
     protected $fillable = [
         'exhibit_title',
@@ -25,5 +25,9 @@ class Exhibit extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function posts()
+    {
+        return $this->belongsToMany(Post::class, 'artworks_exhibits', 'exhibit_id', 'post_id');
     }
 }

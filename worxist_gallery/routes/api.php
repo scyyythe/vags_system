@@ -10,7 +10,7 @@ use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\SavedController;
 use App\Http\Controllers\FavoriteController;
-
+use App\Http\Controllers\ArtworksExhibitController;
 
 
 Route::get('/user', function (Request $request) {
@@ -53,6 +53,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Update Exhibit Status by Organizer
     Route::patch('exhibits/{exhibit}/status', [ExhibitController::class, 'updateStatus']);
+
+
+    // Include the artwork in the exhibit
+    Route::post('/exhibits/artworks', [ArtworksExhibitController::class, 'attachArtworkToExhibit']);
+    Route::get('/exhibits/{exhibitId}/artworks', [ArtworksExhibitController::class, 'getArtworksByExhibit']);
+    Route::delete('/exhibits/{exhibitId}/artworks/{postId}', [ArtworksExhibitController::class, 'detachArtworkFromExhibit']);
+
 
     // User follow and unfollow
     Route::post('/follow', [FollowController::class, 'follow']);

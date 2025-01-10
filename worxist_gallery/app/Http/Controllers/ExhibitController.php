@@ -19,7 +19,8 @@ class ExhibitController extends Controller implements HasMiddleware
 
     public function index()
     {
-        Exhibit::all();
+        $exhibits = Exhibit::all(); // Fetch all exhibits
+        return response()->json($exhibits, 200);
     }
 
     /**
@@ -32,13 +33,17 @@ class ExhibitController extends Controller implements HasMiddleware
             return response()->json(['error' => 'User not authenticated'], 401);
         }
 
+        // Validate the incoming request data
         $fields = $request->validate([
             'exhibit_title' => ['required', 'max:255'],
             'exhibit_description' => ['required', 'max:255'],
             'exhibit_date' => ['required'],
             'exhibit_type' => ['required'],
+            'post_ids' => ['required', 'array', 'min:1', 'max:10'], // Validate the post_ids
+            'post_ids.*' => ['exists:posts,post_id'], // Ensure each post exists
         ]);
 
+        // Create the exhibit
         $exhibit = $request->user()->exhibits()->create([
             'exhibit_title' => $fields['exhibit_title'],
             'exhibit_description' => $fields['exhibit_description'],
@@ -47,8 +52,20 @@ class ExhibitController extends Controller implements HasMiddleware
             'exhibit_status' => 'Pending'
         ]);
 
-        return $exhibit;
+        // Attach the selected posts (artworks) to the exhibit using the pivot table
+        $exhibit->posts()->attach($fields['post_ids']);
+
+        // Retrieve the exhibit with the attached posts using eager loading
+        $exhibitWithPosts = $exhibit->load('posts');
+
+        // Return the newly created exhibit along with the attached artworks
+        return response()->json([
+            'message' => 'Exhibit created successfully with artworks attached.',
+            'exhibit' => $exhibitWithPosts
+        ]);
     }
+
+
 
 
     /**

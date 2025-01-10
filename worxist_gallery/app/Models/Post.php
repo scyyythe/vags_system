@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    use HasFactory;
+
     /** @use HasFactory<\Database\Factories\PostFactory> */
     protected $primaryKey = 'post_id';
-
-    use HasFactory;
 
     protected $fillable = [
         'title',
@@ -20,9 +20,24 @@ class Post extends Model
         'post_status',
     ];
 
-
+    /**
+     * Get the user who created the post.
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the exhibits where this post is included.
+     */
+    public function exhibits()
+    {
+        return $this->belongsToMany(
+            Exhibit::class,        // Related model
+            'artworks_exhibits',   // Pivot table
+            'post_id',             // Foreign key in pivot
+            'exhibit_id'           // Related key in pivot
+        );
     }
 }

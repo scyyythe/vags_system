@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('exhibit_type');
             $table->string('exhibit_status')->default('Pending');
             $table->timestamp('accepted_at')->nullable();
+            $table->timestamps();
         });
     }
 
