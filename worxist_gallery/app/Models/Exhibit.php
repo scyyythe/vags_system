@@ -19,7 +19,6 @@ class Exhibit extends Model
         'exhibit_date',
         'exhibit_type',
         'exhibit_status',
-        'accepted_at',
     ];
 
     public function user()

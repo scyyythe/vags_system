@@ -3,9 +3,12 @@ import { Login } from "./pages/Login";
 import { SignUp } from "./pages/SignUp";
 import "./styles/global.css";
 import { Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/user/Dashboard";
+import MyArtwork from "./pages/user/MyArtworks";
+import Upload from "./pages/user/Upload";
 import { useContext } from "react";
 import { AppContext } from "./context/AppContext";
+import Layout from "./components/layouts/Layout";
 
 export default function App() {
   const { user } = useContext(AppContext);
@@ -38,7 +41,30 @@ export default function App() {
             )
           }
         />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <Layout>
+              <Dashboard />
+            </Layout>
+          }
+        />
+        <Route
+          path="/artworks"
+          element={
+            <Layout>
+              <MyArtwork />
+            </Layout>
+          }
+        />
+        <Route
+          path="/upload"
+          element={
+            <Layout>
+              <Upload />
+            </Layout>
+          }
+        />
       </Routes>
     </main>
   );
