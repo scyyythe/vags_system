@@ -21,7 +21,7 @@ export default defineConfig({
         secure: false,
         headers:{
           Accept:'application/json',
-          'Content-Type':'application/json'
+          // 'Content-Type':'application/json'
         }
       }
   }

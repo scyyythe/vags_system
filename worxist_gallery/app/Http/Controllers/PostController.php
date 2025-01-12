@@ -10,7 +10,9 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
 use App\Models\Notification;
+use Illuminate\Contracts\Cache\Store;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller implements HasMiddleware
 {
@@ -33,27 +35,26 @@ class PostController extends Controller implements HasMiddleware
     public function store(Request $request)
     {
 
-        // Validate incoming data
         $fields = $request->validate([
             'title' => ['required', 'max:255'],
             'description' => ['required', 'max:255'],
             'category' => ['required'],
-            'image' => ['required', 'max:1000']
-            // 'image' => ['required', 'file', 'max:1000', 'mimes:jpeg,png,jpg']
+            'image' => ['required', 'file', 'max:2000', 'mimes:jpeg,png,jpg'],
         ]);
-
-        // Handle file upload and store it
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('posts_images', 'public');
-            $fields['image'] = $imagePath;
+            $path = Storage::disk('public')->put('posts_images', $request->image);
+            $fields['image'] = $path;
         }
 
-        // Create the post with the user association
         $post = $request->user()->posts()->create($fields);
 
-
-        return $post;
+        return response()->json([
+            'post' => $post,
+            'message' => 'Post created successfully',
+        ], 201);
     }
+
+
 
 
 

@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     // Upload a post
-    Route::post('posts/', [PostController::class, 'store']);
+    Route::post('posts', [PostController::class, 'store']);
     Route::put('posts/{posts}', [PostController::class, 'update']);
     Route::delete('posts/{posts}', [PostController::class, 'destroy']);
     Route::get('posts/{posts}', [PostController::class, 'show']);
