@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import { AuthLayout } from "../components/layouts/AuthLayout";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Modal } from "../components/ui/Modal";
 import { useNavigate } from "react-router-dom";
-import { AppContext } from "../context/AppContext";
+// import { AppContext } from "../context/AppContext";
 
 export function SignUp({
   onSectionChange,
@@ -13,7 +13,7 @@ export function SignUp({
   onSectionChange: (section: string) => void;
 }) {
   // token
-  const { setToken } = useContext(AppContext);
+  // const { setToken } = useContext(AppContext);
 
   const [errors, setErrors] = useState({
     name: "",
@@ -148,6 +148,9 @@ export function SignUp({
       // Send data to backend
       const response = await fetch("/api/register", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           name,
           username,
@@ -164,8 +167,8 @@ export function SignUp({
 
       // set the token after the register
       if (response.ok) {
-        localStorage.setItem("token", data.token);
-        setToken(data.token);
+        // localStorage.setItem("token", data.token);
+        // setToken(data.token);
         form.reset();
         setModalVisible(true);
         setTimeout(() => {

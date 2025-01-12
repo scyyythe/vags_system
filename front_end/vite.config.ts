@@ -23,7 +23,12 @@ export default defineConfig({
           Accept:'application/json',
           // 'Content-Type':'application/json'
         }
-      }
+      },
+     '/storage': {
+      target: 'http://127.0.0.1:8000', 
+      changeOrigin: true,
+      rewrite: (path) => path.replace(/^\/storage/, '/storage'),  
+    },
   }
   },
   build: {

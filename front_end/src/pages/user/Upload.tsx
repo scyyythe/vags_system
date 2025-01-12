@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import Layout from "../../components/layouts/Layout"; // Import Layout component
-
+import { Modal } from "../../components/ui/Modal";
 export default function Upload() {
   const { user, token } = useContext(AppContext);
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ export default function Upload() {
   const handleGoBack = () => {
     navigate("/artworks");
   };
-
+  const [isModalVisible, setModalVisible] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -54,7 +54,9 @@ export default function Upload() {
       body: formDataToSend, // Send FormData object
     });
 
+    setModalVisible(true);
     const data = await res.json();
+
     console.log(data);
   }
 
@@ -162,6 +164,12 @@ export default function Upload() {
             Upload Post
           </button>
         </form>
+        {isModalVisible && (
+          <Modal
+            message="Post uploaded successfully !"
+            onClose={() => setModalVisible(false)}
+          />
+        )}
       </div>
     </Layout>
   );

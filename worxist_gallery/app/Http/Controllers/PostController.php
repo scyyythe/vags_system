@@ -26,7 +26,8 @@ class PostController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        return Post::all();
+        //get the post with the information pd sa user ug kinsa ang ni post
+        return Post::with('user')->latest()->get();
     }
 
     /**
