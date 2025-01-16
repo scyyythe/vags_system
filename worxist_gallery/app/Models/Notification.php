@@ -7,8 +7,7 @@ use Illuminate\Notifications\Notifiable;
 
 class Notification extends Model
 {
-    protected $primaryKey = 'notification_id';  // If your primary key is not the default 'id'
-    use Notifiable;
+    protected $primaryKey = 'notification_id';
 
     protected $fillable = [
         'user_id',
@@ -17,15 +16,8 @@ class Notification extends Model
         'is_read',
     ];
 
-    // Relationship with User
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    // Polymorphic relation for 'notifiable' (e.g., post, artwork, etc.)
-    public function notifiable()
-    {
-        return $this->morphTo();
     }
 }

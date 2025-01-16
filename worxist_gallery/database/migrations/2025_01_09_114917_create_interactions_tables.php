@@ -34,6 +34,18 @@ class CreateInteractionsTables extends Migration
             $table->timestamps();
             $table->unique(['user_id', 'post_id']);
         });
+
+        Schema::create('comments', function (Blueprint $table) {
+            $table->id('comment_id');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('post_id')->constrained('posts', 'post_id')->onDelete('cascade');
+            $table->text('comment_text');
+            $table->unique(['user_id', 'post_id']);
+            $table->timestamps();
+        });
+
+        // like on exhibits
+
     }
 
     public function down()
@@ -41,5 +53,6 @@ class CreateInteractionsTables extends Migration
         Schema::dropIfExists('favorites');
         Schema::dropIfExists('saved');
         Schema::dropIfExists('likes');
+        Schema::dropIfExists('comments');
     }
 }

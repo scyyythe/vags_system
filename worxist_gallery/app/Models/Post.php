@@ -40,4 +40,9 @@ class Post extends Model
             'exhibit_id'           // Related key in pivot
         );
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'post_id', 'post_id');
+    }
 }

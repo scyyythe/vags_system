@@ -164,6 +164,13 @@ class PostController extends Controller implements HasMiddleware
 
         return response()->json($favoritedPosts);
     }
+    public function getUserComments()
+    {
+
+        $commentedPost = Auth::user()->commentedPost;
+
+        return response()->json($commentedPost);
+    }
     public function getUserFavoritesAndLikes(Request $request)
     {
         $user = $request->user();

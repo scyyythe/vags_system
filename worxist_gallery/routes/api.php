@@ -11,7 +11,9 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\SavedController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ArtworksExhibitController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\LikeExhibitController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -50,6 +52,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('exhibits/{exhibits}', [ExhibitController::class, 'destroy']);
     Route::get('exhibits/{exhibits}', [ExhibitController::class, 'show']);
 
+    //like exhibit
+    Route::post('/exhibits/{exhibit}/like', [LikeExhibitController::class, 'likeExhibit']);
+    Route::delete('/exhibits/{exhibit}/like', [LikeExhibitController::class, 'removeLike']);
 
     // Update Exhibit Status by Organizer
     Route::patch('exhibits/{exhibit}/status', [ExhibitController::class, 'updateStatus']);
@@ -85,10 +90,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/posts/{post}/favorite', [FavoriteController::class, 'favoritePost']);
     Route::delete('/posts/{post}/favorite', [FavoriteController::class, 'removeFavorite']);
 
+    // Comment routes
+    Route::post('/posts/{post}/comment', [CommentController::class, 'store']);
+    Route::delete('/posts/{post}/comment', [CommentController::class, 'removeComment']);
+
 
     Route::get('/user/posts/liked', [PostController::class, 'getUserLikedPosts']);
     Route::get('/user/posts/saved', [PostController::class, 'getUserSavedPosts']);
     Route::get('/user/posts/favorited', [PostController::class, 'getUserFavoritedPosts']);
+    Route::get('/user/posts/favorited', [PostController::class, 'getUserComments']);
 
     // NOtifcaiton
 

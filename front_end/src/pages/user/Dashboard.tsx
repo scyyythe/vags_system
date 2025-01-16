@@ -33,7 +33,7 @@ export default function Dashboard() {
     if (res.ok) {
       setPosts(data);
     }
-    console.log(data);
+    // console.log(data);
   }
 
   useEffect(() => {
